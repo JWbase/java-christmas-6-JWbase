@@ -1,8 +1,8 @@
 package christmas.view;
 
-import christmas.domain.Date;
 import christmas.domain.Menu;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class OutputView {
@@ -17,8 +17,8 @@ public class OutputView {
         System.out.println(ERROR_PREFIX + message + System.lineSeparator());
     }
 
-    public void printPreviewBenefit(final Date date) {
-        System.out.printf(PREVIEW_EVENT_BENEFIT_MESSAGE + NEW_LINE + NEW_LINE, date.getDate());
+    public void printPreviewBenefit(final LocalDate date) {
+        System.out.printf(PREVIEW_EVENT_BENEFIT_MESSAGE + NEW_LINE + NEW_LINE, date.getDayOfMonth());
     }
 
     public void printOrderDetails(final Map<Menu, Integer> menus) {
