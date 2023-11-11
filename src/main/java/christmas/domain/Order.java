@@ -44,6 +44,14 @@ public class Order {
         }
     }
 
+    public int calculateBeforeDiscountTotalPrice() {
+        int total = 0;
+        for (Map.Entry<Menu, Integer> menu : menus.entrySet()) {
+            total += menu.getKey().getPrice() * menu.getValue();
+        }
+        return total;
+    }
+
     public Date getDate() {
         return date;
     }
