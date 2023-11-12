@@ -1,8 +1,9 @@
 package christmas.domain.discount;
 
-import christmas.domain.order.Date;
 import christmas.domain.Menu;
+import christmas.domain.order.Date;
 import christmas.domain.order.Order;
+import christmas.service.dto.DiscountPolicyDto;
 import christmas.util.EventDateUtil;
 import java.util.EnumMap;
 import java.util.Map;
@@ -18,7 +19,9 @@ class ChristmasDailyDiscountPolicyTest {
         Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
         orderMenus.put(Menu.findByName(Menu.BBQ_RIB.getName()), 4);
         Order order = new Order(EventDateUtil.getLocalDateFromDay(new Date(16).getDate()), orderMenus);
-        int discount = new ChristmasDailyDiscountPolicy().discount(order);
+        DiscountPolicyDto discountPolicyDto = new DiscountPolicyDto(order.getDate(), order.getMenus(),
+                order.calculateBeforeDiscountTotalPrice());
+        int discount = new ChristmasDailyDiscountPolicy().discount(discountPolicyDto);
 
         Assertions.assertThat(discount).isEqualTo(2500);
     }
@@ -29,9 +32,10 @@ class ChristmasDailyDiscountPolicyTest {
         Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
         orderMenus.put(Menu.findByName(Menu.BBQ_RIB.getName()), 4);
         Order order = new Order(EventDateUtil.getLocalDateFromDay(new Date(26).getDate()), orderMenus);
-        int discount = new ChristmasDailyDiscountPolicy().discount(order);
+        DiscountPolicyDto discountPolicyDto = new DiscountPolicyDto(order.getDate(), order.getMenus(),
+                order.calculateBeforeDiscountTotalPrice());
+        int discount = new ChristmasDailyDiscountPolicy().discount(discountPolicyDto);
 
         Assertions.assertThat(discount).isZero();
     }
-
 }

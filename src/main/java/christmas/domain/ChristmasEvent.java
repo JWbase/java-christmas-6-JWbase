@@ -6,9 +6,11 @@ import christmas.domain.discount.SpecialDiscountPolicy;
 import christmas.domain.discount.WeekdayDiscountPolicy;
 import christmas.domain.discount.WeekendDiscountPolicy;
 import christmas.domain.order.Order;
+import christmas.service.dto.DiscountPolicyDto;
 import java.util.List;
 
 public class ChristmasEvent {
+    private static final int MINIMUM_AMOUNT_FOR_DISCOUNT = 10000;
     private List<DiscountPolicy> discountPolicies;
 
     public ChristmasEvent() {
@@ -19,11 +21,11 @@ public class ChristmasEvent {
                 new SpecialDiscountPolicy());
     }
 
-    public int calculateDiscount(Order order) {
-        if (order.calculateBeforeDiscountTotalPrice() > 10000) {
+    public int calculateDiscount(DiscountPolicyDto discountPolicyDto) {
+        if (discountPolicyDto.getTotalPrice() > MINIMUM_AMOUNT_FOR_DISCOUNT) {
             int totalDiscountAmount = 0;
             for (DiscountPolicy discountPolicy : discountPolicies) {
-                totalDiscountAmount += discountPolicy.discount(order);
+                totalDiscountAmount += discountPolicy.discount(discountPolicyDto);
             }
             return totalDiscountAmount;
         }

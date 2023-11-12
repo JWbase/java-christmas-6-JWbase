@@ -1,8 +1,11 @@
 package christmas.domain.discount;
 
-import christmas.domain.order.Order;
+import christmas.constant.DiscountPolicyName;
+import christmas.service.dto.DiscountPolicyDto;
 
 public interface DiscountPolicy {
 
-    int discount(Order order);
+    int discount(DiscountPolicyDto discountPolicyDto);
+
+    DiscountPolicyName getDiscountPolicyName();
 }

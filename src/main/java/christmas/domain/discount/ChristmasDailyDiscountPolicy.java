@@ -1,21 +1,26 @@
 package christmas.domain.discount;
 
 import christmas.constant.DiscountConstants;
-import christmas.domain.order.Order;
+import christmas.constant.DiscountPolicyName;
+import christmas.service.dto.DiscountPolicyDto;
 import java.time.LocalDate;
 
 public class ChristmasDailyDiscountPolicy implements DiscountPolicy {
-
     private static final int INITIAL_DISCOUNT_AMOUNT = 1000;
     private static final int INCREMENT_AMOUNT_PER_DAY = 100;
 
     @Override
-    public int discount(Order order) {
-        LocalDate orderDate = order.getDate();
+    public int discount(DiscountPolicyDto discountPolicyDto) {
+        LocalDate orderDate = discountPolicyDto.getOrderDate();
         if (isWithinDiscountPeriod(orderDate)) {
             return calculateDiscountAmount(orderDate);
         }
         return DiscountConstants.NO_DISCOUNT;
+    }
+
+    @Override
+    public DiscountPolicyName getDiscountPolicyName() {
+        return DiscountPolicyName.CHRISTMAS_DAILY_DISCOUNT;
     }
 
     private int calculateDiscountAmount(LocalDate date) {

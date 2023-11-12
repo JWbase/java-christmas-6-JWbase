@@ -1,7 +1,9 @@
 package christmas.domain.discount;
 
 import christmas.constant.DiscountConstants;
+import christmas.constant.DiscountPolicyName;
 import christmas.domain.order.Order;
+import christmas.service.dto.DiscountPolicyDto;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
@@ -9,12 +11,17 @@ public class SpecialDiscountPolicy implements DiscountPolicy {
     private static final int SPECIAL_DISCOUNT_AMOUNT = 1000;
 
     @Override
-    public int discount(Order order) {
-        LocalDate orderDate = order.getDate();
+    public int discount(DiscountPolicyDto discountPolicyDto) {
+        LocalDate orderDate = discountPolicyDto.getOrderDate();
         if (isWithinDiscountPeriod(orderDate) && isSpecialDiscountDay(orderDate)) {
             return SPECIAL_DISCOUNT_AMOUNT;
         }
         return DiscountConstants.NO_DISCOUNT;
+    }
+
+    @Override
+    public DiscountPolicyName getDiscountPolicyName() {
+        return DiscountPolicyName.SPECIAL_DISCOUNT;
     }
 
     private boolean isWithinDiscountPeriod(LocalDate date) {

@@ -1,21 +1,26 @@
 package christmas.domain.discount;
 
 import christmas.constant.DiscountConstants;
+import christmas.constant.DiscountPolicyName;
 import christmas.domain.Menu;
-import christmas.domain.order.Order;
+import christmas.service.dto.DiscountPolicyDto;
 import java.time.LocalDate;
 
 public class GiftEventPolicy implements DiscountPolicy {
     private static final int MINIMUM_AMOUNT_FOR_GIFT = 120000;
 
     @Override
-    public int discount(Order order) {
-        LocalDate orderDate = order.getDate();
-        if (isWithinDiscountPeriod(orderDate) && isOrderAboveThreshold(order)) {
-            order.addGiftItem(Menu.CHAMPAGNE);
+    public int discount(DiscountPolicyDto discountPolicyDto) {
+        LocalDate orderDate = discountPolicyDto.getOrderDate();
+        if (isWithinDiscountPeriod(orderDate) && isOrderAboveThreshold(discountPolicyDto)) {
             return Menu.CHAMPAGNE.getPrice();
         }
         return DiscountConstants.NO_DISCOUNT;
+    }
+
+    @Override
+    public DiscountPolicyName getDiscountPolicyName() {
+        return DiscountPolicyName.GIFT_EVENT;
     }
 
     private boolean isWithinDiscountPeriod(LocalDate date) {
@@ -30,7 +35,7 @@ public class GiftEventPolicy implements DiscountPolicy {
         return !date.isAfter(DiscountConstants.END_DAY_OF_MONTH);
     }
 
-    private boolean isOrderAboveThreshold(Order order) {
-        return order.calculateBeforeDiscountTotalPrice() > MINIMUM_AMOUNT_FOR_GIFT;
+    private boolean isOrderAboveThreshold(DiscountPolicyDto discountPolicyDto) {
+        return discountPolicyDto.getTotalPrice() > MINIMUM_AMOUNT_FOR_GIFT;
     }
 }
