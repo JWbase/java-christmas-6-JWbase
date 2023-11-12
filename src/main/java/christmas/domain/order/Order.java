@@ -3,6 +3,8 @@ package christmas.domain.order;
 import christmas.domain.Menu;
 import christmas.domain.MenuCategory;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class Order {
@@ -12,11 +14,13 @@ public class Order {
     private static final String ONLY_DRINKS_ORDERED_ERROR_MESSAGE = "음료만 주문할 수 없습니다.";
     private final LocalDate date;
     private final Map<Menu, Integer> menus;
+    private final Map<Menu, Integer> giftItem;
 
     public Order(final LocalDate date, final Map<Menu, Integer> menus) {
         validateMenus(menus);
         this.date = date;
         this.menus = menus;
+        this.giftItem = new EnumMap<>(Menu.class);
     }
 
     private void validateMenus(final Map<Menu, Integer> menus) {
@@ -55,11 +59,19 @@ public class Order {
         return total;
     }
 
+    public void addGiftItem(Menu giftItem) {
+        this.giftItem.put(giftItem, this.giftItem.getOrDefault(giftItem, 0) + 1);
+    }
+
     public LocalDate getDate() {
         return date;
     }
 
     public Map<Menu, Integer> getMenus() {
-        return menus;
+        return Collections.unmodifiableMap(menus);
+    }
+
+    public Map<Menu, Integer> getGiftItem() {
+        return Collections.unmodifiableMap(giftItem);
     }
 }
