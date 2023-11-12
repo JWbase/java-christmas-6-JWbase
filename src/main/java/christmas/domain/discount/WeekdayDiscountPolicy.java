@@ -15,7 +15,6 @@ public class WeekdayDiscountPolicy implements DiscountPolicy {
     @Override
     public int discount(Order order) {
         LocalDate orderDate = order.getDate();
-
         if (isWithinDiscountPeriod(orderDate) && isWeekday(orderDate)) {
             return calculateTotalDiscount(order);
         }

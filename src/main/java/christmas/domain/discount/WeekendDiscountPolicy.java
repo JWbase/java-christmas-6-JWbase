@@ -15,7 +15,6 @@ public class WeekendDiscountPolicy implements DiscountPolicy {
     @Override
     public int discount(Order order) {
         LocalDate orderDate = order.getDate();
-
         if (isWithinDiscountPeriod(orderDate) && isWeekend(orderDate)) {
             return calculateTotalDiscount(order);
         }
@@ -25,7 +24,6 @@ public class WeekendDiscountPolicy implements DiscountPolicy {
     private int calculateTotalDiscount(Order order) {
         int totalDiscount = 0;
         Map<Menu, Integer> menus = order.getMenus();
-
         for (Map.Entry<Menu, Integer> menu : menus.entrySet()) {
             totalDiscount += calculateDiscountForMenu(menu);
         }

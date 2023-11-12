@@ -12,7 +12,6 @@ public class ChristmasDailyDiscountPolicy implements DiscountPolicy {
     @Override
     public int discount(Order order) {
         LocalDate orderDate = order.getDate();
-
         if (isWithinDiscountPeriod(orderDate)) {
             return calculateDiscountAmount(orderDate);
         }

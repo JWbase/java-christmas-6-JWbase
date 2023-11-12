@@ -11,7 +11,6 @@ public class SpecialDiscountPolicy implements DiscountPolicy {
     @Override
     public int discount(Order order) {
         LocalDate orderDate = order.getDate();
-
         if (isWithinDiscountPeriod(orderDate) && isSpecialDiscountDay(orderDate)) {
             return SPECIAL_DISCOUNT_AMOUNT;
         }
