@@ -13,7 +13,6 @@ import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Optional;
 
 public class ChristmasController {
     private final InputView inputView;
@@ -36,6 +35,7 @@ public class ChristmasController {
     }
 
     private Order createOrder() {
+        outputView.printEventInformation();
         Date date = inputDate();
         while (true) {
             try {
@@ -77,7 +77,7 @@ public class ChristmasController {
     }
 
     private void displayDiscountDetails(OrderDto requestOrder) {
-        Optional<Menu> giftMenu = orderService.getGiftMenu(requestOrder);
+        Map<Menu, Integer> giftMenu = orderService.getGiftMenu(requestOrder);
         outputView.printGiftMenu(giftMenu);
         Map<DiscountPolicyName, Integer> discountDetails = orderService.getDiscountDetails(requestOrder);
         outputView.printDiscount(discountDetails);
@@ -87,7 +87,7 @@ public class ChristmasController {
 
     private void displayPaymentAmount(Order order, OrderDto requestOrder) {
         int paymentAmount = order.calculateBeforeDiscountTotalPrice() - orderService.calculatePaymentDue(requestOrder);
-        outputView.printPaymentDue(paymentAmount);
+        outputView.printPaymentAmountAfterDiscount(paymentAmount);
     }
 
     private void displayBadge(OrderDto requestOrder) {
