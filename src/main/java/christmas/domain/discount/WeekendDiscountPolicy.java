@@ -4,20 +4,21 @@ import christmas.constant.DiscountConstants;
 import christmas.constant.DiscountPolicyName;
 import christmas.domain.Menu;
 import christmas.domain.MenuCategory;
-import christmas.service.dto.DiscountPolicyDto;
+import christmas.service.dto.OrderDto;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Map.Entry;
 
 
 public class WeekendDiscountPolicy implements DiscountPolicy {
     private static final int WEEKEND_DISCOUNT_AMOUNT = 2023;
 
     @Override
-    public int discount(DiscountPolicyDto discountPolicyDto) {
-        LocalDate orderDate = discountPolicyDto.getOrderDate();
+    public int discount(OrderDto order) {
+        LocalDate orderDate = order.getDate();
         if (isWithinDiscountPeriod(orderDate) && isWeekend(orderDate)) {
-            return calculateTotalDiscount(discountPolicyDto);
+            return calculateTotalDiscount(order.getMenus());
         }
         return DiscountConstants.NO_DISCOUNT;
     }
@@ -27,16 +28,15 @@ public class WeekendDiscountPolicy implements DiscountPolicy {
         return DiscountPolicyName.WEEKEND_DISCOUNT;
     }
 
-    private int calculateTotalDiscount(DiscountPolicyDto discountPolicyDto) {
+    private int calculateTotalDiscount(Map<Menu, Integer> menus) {
         int totalDiscount = 0;
-        Map<Menu, Integer> menus = discountPolicyDto.getMenus();
-        for (Map.Entry<Menu, Integer> menu : menus.entrySet()) {
+        for (Entry<Menu, Integer> menu : menus.entrySet()) {
             totalDiscount += calculateDiscountForMenu(menu);
         }
         return totalDiscount;
     }
 
-    private int calculateDiscountForMenu(Map.Entry<Menu, Integer> menu) {
+    private int calculateDiscountForMenu(Entry<Menu, Integer> menu) {
         if (isMainCategory(menu.getKey())) {
             return calculateMenuDiscount(menu);
         }

@@ -3,7 +3,7 @@ package christmas.domain.discount;
 import christmas.domain.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
-import christmas.service.dto.DiscountPolicyDto;
+import christmas.service.dto.OrderDto;
 import christmas.util.EventDateUtil;
 import java.util.EnumMap;
 import java.util.Map;
@@ -19,9 +19,8 @@ class WeekdayDiscountPolicyTest {
         Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
         orderMenus.put(Menu.findByName(Menu.CHOCOLATE_CAKE.getName()), 4);
         Order order = new Order(EventDateUtil.getLocalDateFromDay(new Date(18).getDate()), orderMenus);
-        DiscountPolicyDto discountPolicyDto = new DiscountPolicyDto(order.getDate(), order.getMenus(),
-                order.calculateBeforeDiscountTotalPrice());
-        int discount = new WeekdayDiscountPolicy().discount(discountPolicyDto);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = new WeekdayDiscountPolicy().discount(orderDto);
 
         Assertions.assertThat(discount).isEqualTo(2023 * 4);
     }
