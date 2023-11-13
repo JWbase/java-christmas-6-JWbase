@@ -33,7 +33,7 @@ public class InputView {
         System.out.println(ORDER_MENU_MESSAGE);
         String orderMenu = getInput();
         validateOrder(orderMenu);
-        return processOrderMenu(orderMenu);
+        return processOrderMenus(orderMenu);
     }
 
     private static void validateOrder(String orderMenu) {
@@ -42,18 +42,22 @@ public class InputView {
         }
     }
 
-    private Map<Menu, Integer> processOrderMenu(String orderMenu) {
+    private Map<Menu, Integer> processOrderMenus(String orderMenu) {
         Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
         String[] orders = SplitUtil.splitByComma(orderMenu);
         for (String order : orders) {
-            String[] menuAndQuantity = SplitUtil.splitByDash(order);
-            String menuName = menuAndQuantity[0];
-            int quantity = parseInt(menuAndQuantity[1]);
-            Menu menu = Menu.findByName(menuName);
-            validateDuplicateMenuName(orderMenus, menu);
-            orderMenus.put(menu, quantity);
+            processOrder(order, orderMenus);
         }
         return orderMenus;
+    }
+
+    private void processOrder(String order, Map<Menu, Integer> orderMenus) {
+        String[] menuAndQuantity = SplitUtil.splitByDash(order);
+        String menuName = menuAndQuantity[0];
+        int quantity = parseInt(menuAndQuantity[1]);
+        Menu menu = Menu.findByName(menuName);
+        validateDuplicateMenuName(orderMenus, menu);
+        orderMenus.put(menu, quantity);
     }
 
     private void validateDuplicateMenuName(Map<Menu, Integer> orderMenus, Menu menu) {
