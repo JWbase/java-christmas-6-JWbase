@@ -1,35 +1,98 @@
 package christmas.controller;
 
-import christmas.domain.order.Date;
+import christmas.constant.DiscountPolicyName;
+import christmas.domain.Badge;
+import christmas.domain.ChristmasEvent;
 import christmas.domain.Menu;
+import christmas.domain.order.Date;
 import christmas.domain.order.Order;
+import christmas.service.OrderService;
+import christmas.service.dto.OrderDto;
 import christmas.util.EventDateUtil;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 public class ChristmasController {
-    private final InputView inputView = new InputView();
-    private final OutputView outputView = new OutputView();
+    private final InputView inputView;
+    private final OutputView outputView;
+    private final OrderService orderService;
+
+    public ChristmasController() {
+        inputView = new InputView();
+        outputView = new OutputView();
+        orderService = new OrderService(new ChristmasEvent());
+    }
 
     public void run() {
         Order order = createOrder();
-        outputView.printPreviewBenefit(order.getDate());
-        outputView.printOrderDetails(order.getMenus());
-        outputView.printBeforeDiscountTotalPrice(order.calculateBeforeDiscountTotalPrice());
+        OrderDto requestOrder = orderService.convertToDto(order);
+        displayOrderDetails(order);
+        displayDiscountDetails(requestOrder);
+        displayPaymentAmount(order, requestOrder);
+        displayBadge(requestOrder);
     }
 
     private Order createOrder() {
+        Date date = inputDate();
         while (true) {
             try {
-                Date date = new Date(inputView.readDate());
+                Map<Menu, Integer> orderMenus = inputOrderMenu();
                 LocalDate orderDate = EventDateUtil.getLocalDateFromDay(date.getDate());
-                Map<Menu, Integer> orderMenus = inputView.readOrder();
                 return new Order(orderDate, orderMenus);
             } catch (IllegalArgumentException e) {
                 outputView.printError(e.getMessage());
             }
         }
+    }
+
+    private Map<Menu, Integer> inputOrderMenu() {
+        while (true) {
+            try {
+                return inputView.readOrder();
+            } catch (IllegalArgumentException e) {
+                outputView.printError(e.getMessage());
+            }
+        }
+    }
+
+    private Date inputDate() {
+        while (true) {
+            try {
+                int date = inputView.readDate();
+                return new Date(date);
+            } catch (IllegalArgumentException e) {
+                outputView.printError(e.getMessage());
+            }
+        }
+    }
+
+    private void displayOrderDetails(Order order) {
+        outputView.printPreviewBenefit(order.getDate());
+        outputView.printOrderDetails(order.getMenus());
+        int totalPrice = order.calculateBeforeDiscountTotalPrice();
+        outputView.printBeforeDiscountTotalPrice(totalPrice);
+    }
+
+    private void displayDiscountDetails(OrderDto requestOrder) {
+        Optional<Menu> giftMenu = orderService.getGiftMenu(requestOrder);
+        outputView.printGiftMenu(giftMenu);
+        Map<DiscountPolicyName, Integer> discountDetails = orderService.getDiscountDetails(requestOrder);
+        outputView.printDiscount(discountDetails);
+        int totalBenefitAmount = orderService.getTotalBenefitAmount(requestOrder);
+        outputView.printTotalBenefitAmount(totalBenefitAmount);
+    }
+
+    private void displayPaymentAmount(Order order, OrderDto requestOrder) {
+        int paymentAmount = order.calculateBeforeDiscountTotalPrice() - orderService.calculatePaymentDue(requestOrder);
+        outputView.printPaymentDue(paymentAmount);
+    }
+
+    private void displayBadge(OrderDto requestOrder) {
+        int totalBenefitAmount = orderService.getTotalBenefitAmount(requestOrder);
+        Badge decemberBadge = Badge.getBadgeByDiscountPrice(totalBenefitAmount);
+        outputView.printDecemberBadge(decemberBadge.getName());
     }
 }

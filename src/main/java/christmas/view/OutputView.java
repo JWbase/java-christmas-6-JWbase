@@ -1,9 +1,11 @@
 package christmas.view;
 
+import christmas.constant.DiscountPolicyName;
 import christmas.domain.Menu;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 public class OutputView {
     private static final String ERROR_PREFIX = "[ERROR] ";
@@ -32,6 +34,44 @@ public class OutputView {
     public void printBeforeDiscountTotalPrice(final int totalPrice) {
         System.out.println(BEFORE_DISCOUNT_TOTAL_ORDER_PRICE_MESSAGE);
         System.out.println(formatNumber(totalPrice) + CURRENCY_SYMBOL);
+        System.out.println();
+    }
+
+    public void printGiftMenu(Optional<Menu> giftMenu) {
+        System.out.println("<증정 메뉴>");
+        giftMenu.map(menu -> menu.getName() + " 1개")
+                .ifPresentOrElse(System.out::println, () -> System.out.println("없음"));
+        System.out.println();
+    }
+
+    public void printDiscount(Map<DiscountPolicyName, Integer> discountOrder) {
+        System.out.println("<혜택 내역>");
+        Optional<String> discounts = discountOrder.entrySet().stream()
+                .filter(entry -> entry.getValue() != 0)
+                .map(entry -> entry.getKey().getName() + ": -" + formatNumber(entry.getValue()) + "원")
+                .reduce((first, second) -> first + "\n" + second);
+        discounts.ifPresentOrElse(System.out::println, () -> System.out.println("없음"));
+    }
+
+    public void printTotalBenefitAmount(int totalDiscountAmount) {
+        System.out.println();
+        System.out.println("<총혜택 금액>");
+        Optional.of(totalDiscountAmount)
+                .filter(amount -> amount != 0)
+                .map(amount -> "-" + formatNumber(amount) + "원")
+                .ifPresentOrElse(System.out::println, () -> System.out.println("없음"));
+        System.out.println();
+    }
+
+    public void printDecemberBadge(String name) {
+        System.out.println("<12월 이벤트 배지>");
+        System.out.println(name);
+    }
+
+    public void printPaymentDue(int paymentAmount) {
+        System.out.println("<할인 후 예상 결제 금액>");
+        System.out.println(formatNumber(paymentAmount) + "원");
+        System.out.println();
     }
 
     private String formatNumber(final int number) {
