@@ -12,7 +12,6 @@ import christmas.service.dto.OrderDto;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class ChristmasEvent {
     private static final int MINIMUM_AMOUNT_FOR_DISCOUNT = 10000;
@@ -46,11 +45,12 @@ public class ChristmasEvent {
                 .sum();
     }
 
-    public Optional<Menu> getGiftMenu(OrderDto order) {
+    public Map<Menu, Integer> getGiftMenu(OrderDto order) {
+        Map<Menu, Integer> giftMenu = new EnumMap<>(Menu.class);
         if (order.getTotalPrice() >= MINIMUM_AMOUNT_FOR_GIFT) {
-            return Optional.of(Menu.CHAMPAGNE);
+            giftMenu.put(Menu.CHAMPAGNE, 1);
         }
-        return Optional.empty();
+        return giftMenu;
     }
 
     private void addGift(OrderDto order, Map<DiscountPolicyName, Integer> benefitDetail) {

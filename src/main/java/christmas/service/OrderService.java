@@ -6,7 +6,6 @@ import christmas.domain.Menu;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
 import java.util.Map;
-import java.util.Optional;
 
 public class OrderService {
     private final ChristmasEvent christmasEvent;
@@ -27,7 +26,7 @@ public class OrderService {
         return christmasEvent.calculateTotalDiscount(order);
     }
 
-    public Optional<Menu> getGiftMenu(OrderDto order) {
+    public Map<Menu, Integer> getGiftMenu(OrderDto order) {
         return christmasEvent.getGiftMenu(order);
     }
 

@@ -1,5 +1,6 @@
 package christmas.view;
 
+import christmas.constant.CommentConstants;
 import christmas.constant.DiscountPolicyName;
 import christmas.domain.Menu;
 import java.text.NumberFormat;
@@ -14,9 +15,12 @@ public class OutputView {
     private static final String ORDER_MENU_MESSAGE = "<주문 메뉴>";
     private static final String BEFORE_DISCOUNT_TOTAL_ORDER_PRICE_MESSAGE = "<할인 전 총주문 금액>";
     private static final String CURRENCY_SYMBOL = "원";
+    private static final String TOTAL_BENEFIT_AMOUNT = "<총혜택 금액>";
+    private static final String DECEMBER_EVENT_BADGE_MESSAGE = "<12월 이벤트 배지>";
+    private static final String PAYMENT_AMOUNT_AFTER_DISCOUNT = "<할인 후 예상 결제 금액>";
 
-    public void printError(final String message) {
-        System.out.println(ERROR_PREFIX + message + System.lineSeparator());
+    public void printEventInformation() {
+        System.out.print(CommentConstants.EVENT_INFORMATION_MESSAGE);
     }
 
     public void printPreviewBenefit(final LocalDate date) {
@@ -37,10 +41,16 @@ public class OutputView {
         System.out.println();
     }
 
-    public void printGiftMenu(Optional<Menu> giftMenu) {
+    public void printGiftMenu(Map<Menu, Integer> giftMenu) {
         System.out.println("<증정 메뉴>");
-        giftMenu.map(menu -> menu.getName() + " 1개")
-                .ifPresentOrElse(System.out::println, () -> System.out.println("없음"));
+        if (giftMenu.isEmpty()) {
+            System.out.println("없음");
+            System.out.println();
+            return;
+        }
+        for (Map.Entry<Menu, Integer> menu : giftMenu.entrySet()) {
+            System.out.println(menu.getKey().getName() + " " + menu.getValue() + "개");
+        }
         System.out.println();
     }
 
@@ -49,13 +59,13 @@ public class OutputView {
         Optional<String> discounts = discountOrder.entrySet().stream()
                 .filter(entry -> entry.getValue() != 0)
                 .map(entry -> entry.getKey().getName() + ": -" + formatNumber(entry.getValue()) + "원")
-                .reduce((first, second) -> first + "\n" + second);
+                .reduce((first, second) -> first + NEW_LINE + second);
         discounts.ifPresentOrElse(System.out::println, () -> System.out.println("없음"));
     }
 
     public void printTotalBenefitAmount(int totalDiscountAmount) {
         System.out.println();
-        System.out.println("<총혜택 금액>");
+        System.out.println(TOTAL_BENEFIT_AMOUNT);
         Optional.of(totalDiscountAmount)
                 .filter(amount -> amount != 0)
                 .map(amount -> "-" + formatNumber(amount) + "원")
@@ -64,14 +74,18 @@ public class OutputView {
     }
 
     public void printDecemberBadge(String name) {
-        System.out.println("<12월 이벤트 배지>");
+        System.out.println(DECEMBER_EVENT_BADGE_MESSAGE);
         System.out.println(name);
     }
 
-    public void printPaymentDue(int paymentAmount) {
-        System.out.println("<할인 후 예상 결제 금액>");
+    public void printPaymentAmountAfterDiscount(int paymentAmount) {
+        System.out.println(PAYMENT_AMOUNT_AFTER_DISCOUNT);
         System.out.println(formatNumber(paymentAmount) + "원");
         System.out.println();
+    }
+
+    public void printError(final String message) {
+        System.out.println(ERROR_PREFIX + message + System.lineSeparator());
     }
 
     private String formatNumber(final int number) {
