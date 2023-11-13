@@ -2,7 +2,7 @@ package christmas.service;
 
 import christmas.constant.DiscountPolicyName;
 import christmas.domain.ChristmasEvent;
-import christmas.domain.Menu;
+import christmas.domain.menu.Menu;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class OrderService {
         this.christmasEvent = christmasEvent;
     }
 
-    public OrderDto convertToDto(Order order) {
+    public OrderDto convertToDto(final Order order) {
         return new OrderDto(order);
     }
 
@@ -22,15 +22,15 @@ public class OrderService {
         return christmasEvent.calculateBenefitDetails(order);
     }
 
-    public int getTotalBenefitAmount(OrderDto order) {
+    public int getTotalBenefitAmount(final OrderDto order) {
         return christmasEvent.calculateTotalDiscount(order);
     }
 
-    public Map<Menu, Integer> getGiftMenu(OrderDto order) {
+    public Map<Menu, Integer> getGiftMenu(final OrderDto order) {
         return christmasEvent.getGiftMenu(order);
     }
 
-    public int calculatePaymentDue(OrderDto order) {
+    public int calculatePaymentDue(final OrderDto order) {
         Map<DiscountPolicyName, Integer> discountPolicy = getDiscountDetails(order);
         discountPolicy.remove(DiscountPolicyName.GIFT_EVENT);
 

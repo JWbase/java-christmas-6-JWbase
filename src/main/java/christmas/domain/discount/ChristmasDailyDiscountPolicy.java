@@ -10,7 +10,7 @@ public class ChristmasDailyDiscountPolicy implements DiscountPolicy {
     private static final int INCREMENT_AMOUNT_PER_DAY = 100;
 
     @Override
-    public int discount(OrderDto order) {
+    public int discount(final OrderDto order) {
         LocalDate orderDate = order.getDate();
         if (isWithinDiscountPeriod(orderDate)) {
             return calculateDiscountAmount(orderDate);

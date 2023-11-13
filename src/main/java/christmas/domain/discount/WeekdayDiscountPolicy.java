@@ -2,8 +2,8 @@ package christmas.domain.discount;
 
 import christmas.constant.DiscountConstants;
 import christmas.constant.DiscountPolicyName;
-import christmas.domain.Menu;
-import christmas.domain.MenuCategory;
+import christmas.domain.menu.Menu;
+import christmas.domain.menu.MenuCategory;
 import christmas.service.dto.OrderDto;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ public class WeekdayDiscountPolicy implements DiscountPolicy {
     private static final int WEEKDAY_DISCOUNT_AMOUNT = 2023;
 
     @Override
-    public int discount(OrderDto order) {
+    public int discount(final OrderDto order) {
         LocalDate orderDate = order.getDate();
         if (isWithinDiscountPeriod(orderDate) && isWeekday(orderDate)) {
             return calculateTotalDiscount(order.getMenus());

@@ -3,7 +3,7 @@ package christmas.controller;
 import christmas.constant.DiscountPolicyName;
 import christmas.domain.Badge;
 import christmas.domain.ChristmasEvent;
-import christmas.domain.Menu;
+import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.OrderService;
@@ -69,14 +69,14 @@ public class ChristmasController {
         }
     }
 
-    private void displayOrderDetails(Order order) {
+    private void displayOrderDetails(final Order order) {
         outputView.printPreviewBenefit(order.getDate());
         outputView.printOrderDetails(order.getMenus());
         int totalPrice = order.calculateBeforeDiscountTotalPrice();
         outputView.printBeforeDiscountTotalPrice(totalPrice);
     }
 
-    private void displayDiscountDetails(OrderDto requestOrder) {
+    private void displayDiscountDetails(final OrderDto requestOrder) {
         Map<Menu, Integer> giftMenu = orderService.getGiftMenu(requestOrder);
         outputView.printGiftMenu(giftMenu);
         Map<DiscountPolicyName, Integer> discountDetails = orderService.getDiscountDetails(requestOrder);
@@ -85,12 +85,12 @@ public class ChristmasController {
         outputView.printTotalBenefitAmount(totalBenefitAmount);
     }
 
-    private void displayPaymentAmount(Order order, OrderDto requestOrder) {
+    private void displayPaymentAmount(final Order order, final OrderDto requestOrder) {
         int paymentAmount = order.calculateBeforeDiscountTotalPrice() - orderService.calculatePaymentDue(requestOrder);
         outputView.printPaymentAmountAfterDiscount(paymentAmount);
     }
 
-    private void displayBadge(OrderDto requestOrder) {
+    private void displayBadge(final OrderDto requestOrder) {
         int totalBenefitAmount = orderService.getTotalBenefitAmount(requestOrder);
         Badge decemberBadge = Badge.getBadgeByDiscountPrice(totalBenefitAmount);
         outputView.printDecemberBadge(decemberBadge.getName());

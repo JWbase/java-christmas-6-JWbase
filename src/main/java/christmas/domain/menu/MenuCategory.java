@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.menu;
 
 public enum MenuCategory {
     APPETIZER("애피타이저"),
@@ -8,7 +8,7 @@ public enum MenuCategory {
 
     private final String category;
 
-    MenuCategory(String description) {
+    MenuCategory(final String description) {
         this.category = description;
     }
 

@@ -2,13 +2,13 @@ package christmas.domain.discount;
 
 import christmas.constant.DiscountConstants;
 import christmas.constant.DiscountPolicyName;
-import christmas.domain.Menu;
+import christmas.domain.menu.Menu;
 import christmas.service.dto.OrderDto;
 import java.time.LocalDate;
 
 public class GiftEventPolicy {
 
-    public int discountGiftPrice(OrderDto order) {
+    public int discountGiftPrice(final OrderDto order) {
         LocalDate orderDate = order.getDate();
         if (isWithinDiscountPeriod(orderDate)) {
             return Menu.CHAMPAGNE.getPrice();

@@ -1,4 +1,4 @@
-package christmas.domain;
+package christmas.domain.menu;
 
 import java.util.Arrays;
 
@@ -25,7 +25,7 @@ public enum Menu {
     private final int price;
     private final MenuCategory menuCategory;
 
-    Menu(String name, int price, MenuCategory menuCategory) {
+    Menu(final String name, final int price, final MenuCategory menuCategory) {
         this.name = name;
         this.price = price;
         this.menuCategory = menuCategory;

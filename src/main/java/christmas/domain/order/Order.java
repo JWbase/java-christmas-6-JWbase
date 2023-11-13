@@ -1,7 +1,7 @@
 package christmas.domain.order;
 
-import christmas.domain.Menu;
-import christmas.domain.MenuCategory;
+import christmas.domain.menu.Menu;
+import christmas.domain.menu.MenuCategory;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;

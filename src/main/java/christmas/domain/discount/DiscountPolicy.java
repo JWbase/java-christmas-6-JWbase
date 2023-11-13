@@ -5,7 +5,7 @@ import christmas.service.dto.OrderDto;
 
 public interface DiscountPolicy {
 
-    int discount(OrderDto order);
+    int discount(final OrderDto order);
 
     DiscountPolicyName getDiscountPolicyName();
 }

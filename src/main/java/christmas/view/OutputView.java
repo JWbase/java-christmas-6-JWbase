@@ -2,7 +2,7 @@ package christmas.view;
 
 import christmas.constant.CommentConstants;
 import christmas.constant.DiscountPolicyName;
-import christmas.domain.Menu;
+import christmas.domain.menu.Menu;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class OutputView {
         System.out.println();
     }
 
-    public void printGiftMenu(Map<Menu, Integer> giftMenu) {
+    public void printGiftMenu(final Map<Menu, Integer> giftMenu) {
         System.out.println("<증정 메뉴>");
         if (giftMenu.isEmpty()) {
             System.out.println("없음");
@@ -54,7 +54,7 @@ public class OutputView {
         System.out.println();
     }
 
-    public void printDiscount(Map<DiscountPolicyName, Integer> discountOrder) {
+    public void printDiscount(final Map<DiscountPolicyName, Integer> discountOrder) {
         System.out.println("<혜택 내역>");
         Optional<String> discounts = discountOrder.entrySet().stream()
                 .filter(entry -> entry.getValue() != 0)
@@ -63,7 +63,7 @@ public class OutputView {
         discounts.ifPresentOrElse(System.out::println, () -> System.out.println("없음"));
     }
 
-    public void printTotalBenefitAmount(int totalDiscountAmount) {
+    public void printTotalBenefitAmount(final int totalDiscountAmount) {
         System.out.println();
         System.out.println(TOTAL_BENEFIT_AMOUNT);
         Optional.of(totalDiscountAmount)
@@ -73,12 +73,12 @@ public class OutputView {
         System.out.println();
     }
 
-    public void printDecemberBadge(String name) {
+    public void printDecemberBadge(final String name) {
         System.out.println(DECEMBER_EVENT_BADGE_MESSAGE);
         System.out.println(name);
     }
 
-    public void printPaymentAmountAfterDiscount(int paymentAmount) {
+    public void printPaymentAmountAfterDiscount(final int paymentAmount) {
         System.out.println(PAYMENT_AMOUNT_AFTER_DISCOUNT);
         System.out.println(formatNumber(paymentAmount) + "원");
         System.out.println();

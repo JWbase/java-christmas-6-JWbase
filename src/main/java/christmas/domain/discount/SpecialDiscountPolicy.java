@@ -10,7 +10,7 @@ public class SpecialDiscountPolicy implements DiscountPolicy {
     private static final int SPECIAL_DISCOUNT_AMOUNT = 1000;
 
     @Override
-    public int discount(OrderDto order) {
+    public int discount(final OrderDto order) {
         LocalDate orderDate = order.getDate();
         if (isWithinDiscountPeriod(orderDate) && isSpecialDiscountDay(orderDate)) {
             return SPECIAL_DISCOUNT_AMOUNT;
@@ -47,4 +47,3 @@ public class SpecialDiscountPolicy implements DiscountPolicy {
         return date.equals(DiscountConstants.CHRISTMAS);
     }
 }
-

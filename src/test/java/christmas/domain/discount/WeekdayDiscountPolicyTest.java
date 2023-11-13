@@ -1,6 +1,6 @@
 package christmas.domain.discount;
 
-import christmas.domain.Menu;
+import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;

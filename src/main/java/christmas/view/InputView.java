@@ -1,7 +1,7 @@
 package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
-import christmas.domain.Menu;
+import christmas.domain.menu.Menu;
 import christmas.util.SplitUtil;
 import java.util.EnumMap;
 import java.util.Map;
@@ -36,13 +36,13 @@ public class InputView {
         return processOrderMenus(orderMenu);
     }
 
-    private static void validateOrder(String orderMenu) {
+    private static void validateOrder(final String orderMenu) {
         if (!ORDER_PATTERN.matcher(orderMenu).matches()) {
             throw new IllegalArgumentException(INVALID_ORDER_MESSAGE);
         }
     }
 
-    private Map<Menu, Integer> processOrderMenus(String orderMenu) {
+    private Map<Menu, Integer> processOrderMenus(final String orderMenu) {
         Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
         String[] orders = SplitUtil.splitByComma(orderMenu);
         for (String order : orders) {
@@ -60,13 +60,13 @@ public class InputView {
         orderMenus.put(menu, quantity);
     }
 
-    private void validateDuplicateMenuName(Map<Menu, Integer> orderMenus, Menu menu) {
+    private void validateDuplicateMenuName(final Map<Menu, Integer> orderMenus, final Menu menu) {
         if (orderMenus.containsKey(menu)) {
             throw new IllegalArgumentException(INVALID_ORDER_MESSAGE);
         }
     }
 
-    private int parseInt(String input) {
+    private int parseInt(final String input) {
         return Integer.parseInt(input);
     }
 

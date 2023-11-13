@@ -9,7 +9,7 @@ public class EventDateUtil {
     private EventDateUtil() {
     }
 
-    public static LocalDate getLocalDateFromDay(int day) {
+    public static LocalDate getLocalDateFromDay(final int day) {
         return LocalDate.of(YEAR, MONTH, day);
     }
 }

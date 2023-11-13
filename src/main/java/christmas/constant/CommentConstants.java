@@ -1,9 +1,6 @@
 package christmas.constant;
 
 public final class CommentConstants {
-    private CommentConstants() {
-    }
-
     public static final String EVENT_INFORMATION_MESSAGE = """
             우테코 식당의 최대 이벤트! 12월 이벤트를 시작합니다!\s
             최대 3번의 중복 할인과 우테코가 준비한 두개의 깜짝 선물을 받아가세요!
@@ -51,4 +48,7 @@ public final class CommentConstants {
             ---------------------------------------------------------------       
             안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.
             """;
+
+    private CommentConstants() {
+    }
 }

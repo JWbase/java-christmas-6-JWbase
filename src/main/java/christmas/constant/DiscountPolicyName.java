@@ -9,7 +9,7 @@ public enum DiscountPolicyName {
 
     private final String name;
 
-    DiscountPolicyName(String name) {
+    DiscountPolicyName(final String name) {
         this.name = name;
     }
 
