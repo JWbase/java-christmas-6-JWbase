@@ -50,4 +50,3 @@ public enum Menu {
         return menuCategory;
     }
 }
-
