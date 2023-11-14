@@ -8,10 +8,8 @@ import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.OrderService;
 import christmas.service.dto.OrderDto;
-import christmas.util.EventDateUtil;
 import christmas.view.InputView;
 import christmas.view.OutputView;
-import java.time.LocalDate;
 import java.util.Map;
 
 public class ChristmasController {
@@ -28,9 +26,9 @@ public class ChristmasController {
     public void run() {
         Order order = createOrder();
         OrderDto requestOrder = orderService.convertToDto(order);
-        displayOrderDetails(order);
+        displayOrderDetails(requestOrder);
         displayDiscountDetails(requestOrder);
-        displayPaymentAmount(order, requestOrder);
+        displayPaymentAmount(requestOrder);
         displayBadge(requestOrder);
     }
 
@@ -40,8 +38,7 @@ public class ChristmasController {
         while (true) {
             try {
                 Map<Menu, Integer> orderMenus = inputOrderMenu();
-                LocalDate orderDate = EventDateUtil.getLocalDateFromDay(date.getDate());
-                return new Order(orderDate, orderMenus);
+                return orderService.createOrder(date, orderMenus);
             } catch (IllegalArgumentException e) {
                 outputView.printError(e.getMessage());
             }
@@ -69,11 +66,10 @@ public class ChristmasController {
         }
     }
 
-    private void displayOrderDetails(final Order order) {
+    private void displayOrderDetails(final OrderDto order) {
         outputView.printPreviewBenefit(order.getDate());
         outputView.printOrderDetails(order.getMenus());
-        int totalPrice = order.calculateBeforeDiscountTotalPrice();
-        outputView.printBeforeDiscountTotalPrice(totalPrice);
+        outputView.printBeforeDiscountTotalPrice(order.getTotalPrice());
     }
 
     private void displayDiscountDetails(final OrderDto requestOrder) {
@@ -85,8 +81,8 @@ public class ChristmasController {
         outputView.printTotalBenefitAmount(totalBenefitAmount);
     }
 
-    private void displayPaymentAmount(final Order order, final OrderDto requestOrder) {
-        int paymentAmount = order.calculateBeforeDiscountTotalPrice() - orderService.calculatePaymentDue(requestOrder);
+    private void displayPaymentAmount(final OrderDto requestOrder) {
+        int paymentAmount = requestOrder.getTotalPrice() - orderService.calculatePaymentDue(requestOrder);
         outputView.printPaymentAmountAfterDiscount(paymentAmount);
     }
 

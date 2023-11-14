@@ -3,6 +3,7 @@ package christmas.service;
 import christmas.constant.DiscountPolicyName;
 import christmas.domain.ChristmasEvent;
 import christmas.domain.menu.Menu;
+import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
 import java.util.Map;
@@ -16,6 +17,10 @@ public class OrderService {
 
     public OrderDto convertToDto(final Order order) {
         return new OrderDto(order);
+    }
+
+    public Order createOrder(final Date date, final Map<Menu, Integer> menus) {
+        return new Order(date, menus);
     }
 
     public Map<DiscountPolicyName, Integer> getDiscountDetails(final OrderDto order) {
