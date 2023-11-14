@@ -8,8 +8,8 @@ public enum MenuCategory {
 
     private final String category;
 
-    MenuCategory(final String description) {
-        this.category = description;
+    MenuCategory(final String category) {
+        this.category = category;
     }
 
     public String getCategory() {
