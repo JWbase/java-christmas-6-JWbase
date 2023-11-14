@@ -19,6 +19,7 @@ public class ChristmasEvent {
     private static final int MINIMUM_AMOUNT_FOR_GIFT = 120000;
     private final List<DiscountPolicy> discountPolicies;
     private final GiftEventPolicy giftEventPolicy;
+    private final Map<Menu, Integer> giftMenu;
 
     public ChristmasEvent() {
         this.discountPolicies = List.of(
@@ -27,6 +28,7 @@ public class ChristmasEvent {
                 new WeekendDiscountPolicy(),
                 new SpecialDiscountPolicy());
         this.giftEventPolicy = new GiftEventPolicy();
+        this.giftMenu = new EnumMap<>(Menu.class);
     }
 
     public Map<DiscountPolicyName, Integer> calculateBenefitDetails(final OrderDto order) {
@@ -46,18 +48,11 @@ public class ChristmasEvent {
                 .sum();
     }
 
-    public Map<Menu, Integer> getGiftMenu(final OrderDto order) {
-        Map<Menu, Integer> giftMenu = new EnumMap<>(Menu.class);
-        if (order.getTotalPrice() >= MINIMUM_AMOUNT_FOR_GIFT) {
-            giftMenu.put(Menu.CHAMPAGNE, 1);
-        }
-        return giftMenu;
-    }
-
     private void addGift(final OrderDto order, final Map<DiscountPolicyName, Integer> benefitDetail) {
         if (order.getTotalPrice() >= MINIMUM_AMOUNT_FOR_GIFT) {
             int giftPrice = giftEventPolicy.discountGiftPrice(order);
             benefitDetail.put(DiscountPolicyName.GIFT_EVENT, giftPrice);
+            giftMenu.put(Menu.CHAMPAGNE, 1);
         }
     }
 
@@ -70,5 +65,10 @@ public class ChristmasEvent {
             }
         }
         return discountDetail;
+    }
+
+    public Map<Menu, Integer> getGiftMenu(final OrderDto order) {
+        calculateBenefitDetails(order);
+        return giftMenu;
     }
 }
