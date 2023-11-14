@@ -1,27 +1,59 @@
 package christmas.domain.discount;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
-import christmas.util.EventDateUtil;
 import java.util.EnumMap;
 import java.util.Map;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class WeekdayDiscountPolicyTest {
+    private WeekdayDiscountPolicy weekdayDiscountPolicy;
+    Map<Menu, Integer> menus;
 
-    @DisplayName("평일에 디저트 1개당 2023원을 할인 한다.")
+    @BeforeEach
+    void setUp() {
+        menus = new EnumMap<>(Menu.class);
+        weekdayDiscountPolicy = new WeekdayDiscountPolicy();
+    }
+
+    @DisplayName("평일에 디저트를 주문할 경우 개당 2,023원씩 할인된다.")
     @Test
-    void christmasDailyDiscount() {
-        Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
-        orderMenus.put(Menu.findByName(Menu.CHOCOLATE_CAKE.getName()), 4);
-        Order order = new Order(new Date(18), orderMenus);
+    void discountOnWeekdayAndDessertOrderTest() {
+        Date date = new Date(4);
+        menus.put(Menu.CHOCOLATE_CAKE, 1);
+        menus.put(Menu.ICE_CREAM, 1);
+        Order order = new Order(date, menus);
         OrderDto orderDto = new OrderDto(order);
-        int discount = new WeekdayDiscountPolicy().discount(orderDto);
+        int discount = weekdayDiscountPolicy.discount(orderDto);
+        assertThat(discount).isEqualTo(4046);
+    }
 
-        Assertions.assertThat(discount).isEqualTo(2023 * 4);
+    @DisplayName("평일에 디저트가 아닌 메뉴를 주문할 경우 할인이 적용되지 않는다.")
+    @Test
+    void noDiscountOnWeekdayAndNonDessertOrderTest() {
+        Date date = new Date(4);
+        menus.put(Menu.T_BONE_STEAK, 1);
+        Order order = new Order(date, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = weekdayDiscountPolicy.discount(orderDto);
+        assertThat(discount).isZero();
+    }
+
+    @DisplayName("주말에 주문할 경우 할인이 적용되지 않는다.")
+    @Test
+    void noDiscountOnWeekendTest() {
+        Date date = new Date(2);
+        menus.put(Menu.CHOCOLATE_CAKE, 1);
+        menus.put(Menu.ICE_CREAM, 1);
+        Order order = new Order(date, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = weekdayDiscountPolicy.discount(orderDto);
+        assertThat(discount).isZero();
     }
 }
