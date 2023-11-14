@@ -39,18 +39,7 @@ public class ChristmasController {
         LocalDate date = inputDate();
         while (true) {
             try {
-                Map<Menu, Integer> orderMenus = inputOrderMenu();
-                return orderService.createOrder(date, orderMenus);
-            } catch (IllegalArgumentException e) {
-                outputView.printError(e.getMessage());
-            }
-        }
-    }
-
-    private Map<Menu, Integer> inputOrderMenu() {
-        while (true) {
-            try {
-                return inputView.readOrder();
+                return orderService.createOrder(date, inputView.readOrder());
             } catch (IllegalArgumentException e) {
                 outputView.printError(e.getMessage());
             }
