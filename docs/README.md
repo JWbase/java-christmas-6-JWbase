@@ -2,6 +2,46 @@
 - 중복된 할인과 증정을 허용해서, 고객들이 혜택을 많이 받는다고 체감할 수 있게 하는 것
 - 올해 12월에 지난 5년 중 최고의 판매 금액을 달성
 - 12월 이벤트 참여 고객의 5%가 내년 1월 새해 이벤트에 재 참여 하는것
+
+# 프로젝트 구조
+```agsl
+📦java
+ ┗ 📂christmas
+ ┃ ┣ 📂constant
+ ┃ ┃ ┣ 📜CommentConstants.java
+ ┃ ┃ ┣ 📜DiscountConstants.java
+ ┃ ┃ ┗ 📜DiscountPolicyName.java
+ ┃ ┣ 📂controller
+ ┃ ┃ ┗ 📜ChristmasController.java
+ ┃ ┣ 📂domain
+ ┃ ┃ ┣ 📂discount
+ ┃ ┃ ┃ ┣ 📜ChristmasDailyDiscountPolicy.java
+ ┃ ┃ ┃ ┣ 📜DiscountPolicy.java
+ ┃ ┃ ┃ ┣ 📜GiftEventPolicy.java
+ ┃ ┃ ┃ ┣ 📜SpecialDiscountPolicy.java
+ ┃ ┃ ┃ ┣ 📜WeekdayDiscountPolicy.java
+ ┃ ┃ ┃ ┗ 📜WeekendDiscountPolicy.java
+ ┃ ┃ ┣ 📂menu
+ ┃ ┃ ┃ ┣ 📜Menu.java
+ ┃ ┃ ┃ ┗ 📜MenuCategory.java
+ ┃ ┃ ┣ 📂order
+ ┃ ┃ ┃ ┣ 📜Date.java
+ ┃ ┃ ┃ ┗ 📜Order.java
+ ┃ ┃ ┣ 📜Badge.java
+ ┃ ┃ ┗ 📜ChristmasEvent.java
+ ┃ ┣ 📂service
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┗ 📜OrderDto.java
+ ┃ ┃ ┗ 📜OrderService.java
+ ┃ ┣ 📂util
+ ┃ ┃ ┣ 📜EventDateUtil.java
+ ┃ ┃ ┗ 📜SplitUtil.java
+ ┃ ┣ 📂view
+ ┃ ┃ ┣ 📜InputView.java
+ ┃ ┃ ┗ 📜OutputView.java
+ ┃ ┗ 📜Application.java
+```
+
 # 🚀 기능 목록
 ## 안내 문구 출력
 ```
