@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class WeekdayDiscountPolicy implements DiscountPolicy {
-
     private static final int WEEKDAY_DISCOUNT_AMOUNT = 2023;
 
     @Override
