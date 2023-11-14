@@ -6,6 +6,8 @@ import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
+import christmas.util.EventDateUtil;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +28,10 @@ class WeekdayDiscountPolicyTest {
     @Test
     void discountOnWeekdayAndDessertOrderTest() {
         Date date = new Date(4);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
         menus.put(Menu.CHOCOLATE_CAKE, 1);
         menus.put(Menu.ICE_CREAM, 1);
-        Order order = new Order(date, menus);
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = weekdayDiscountPolicy.discount(orderDto);
         assertThat(discount).isEqualTo(4046);
@@ -38,8 +41,9 @@ class WeekdayDiscountPolicyTest {
     @Test
     void noDiscountOnWeekdayAndNonDessertOrderTest() {
         Date date = new Date(4);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
         menus.put(Menu.T_BONE_STEAK, 1);
-        Order order = new Order(date, menus);
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = weekdayDiscountPolicy.discount(orderDto);
         assertThat(discount).isZero();
@@ -49,9 +53,10 @@ class WeekdayDiscountPolicyTest {
     @Test
     void noDiscountOnWeekendTest() {
         Date date = new Date(2);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
         menus.put(Menu.CHOCOLATE_CAKE, 1);
         menus.put(Menu.ICE_CREAM, 1);
-        Order order = new Order(date, menus);
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = weekdayDiscountPolicy.discount(orderDto);
         assertThat(discount).isZero();

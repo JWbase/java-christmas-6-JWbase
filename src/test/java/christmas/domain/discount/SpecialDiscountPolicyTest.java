@@ -6,6 +6,8 @@ import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
+import christmas.util.EventDateUtil;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -32,7 +34,8 @@ class SpecialDiscountPolicyTest {
     @MethodSource("testCasesForSpecialDiscount")
     void christmasDailyDiscount(int day, int expectedDiscount) {
         Date date = new Date(day);
-        Order order = new Order(date, menus);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = specialDiscountPolicy.discount(orderDto);
 
@@ -43,7 +46,8 @@ class SpecialDiscountPolicyTest {
     @Test
     void maxDiscountAmountTest() {
         Date date = new Date(25);
-        Order order = new Order(date, menus);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = specialDiscountPolicy.discount(orderDto);
 
@@ -54,7 +58,8 @@ class SpecialDiscountPolicyTest {
     @Test
     void noDiscountTest() {
         Date date = new Date(1);
-        Order order = new Order(date, menus);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = specialDiscountPolicy.discount(orderDto);
 

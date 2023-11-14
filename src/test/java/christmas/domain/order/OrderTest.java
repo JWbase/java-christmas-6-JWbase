@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import christmas.domain.menu.Menu;
+import christmas.util.EventDateUtil;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,12 +13,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class OrderTest {
-    private Date date;
+    private LocalDate date;
     private Map<Menu, Integer> menus;
 
     @BeforeEach
     void setUp() {
-        date = new Date(25);
+        date = EventDateUtil.getLocalDateFromDay(new Date(25).getDate());
         menus = new EnumMap<>(Menu.class);
     }
 

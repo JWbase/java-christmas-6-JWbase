@@ -11,7 +11,7 @@ public class OrderDto {
     private final int totalPrice;
 
     public OrderDto(final Order order) {
-        this.date = order.getDate().getLocalDate();
+        this.date = order.getDate();
         this.menus = order.getMenus();
         this.totalPrice = order.calculateBeforeDiscountTotalPrice();
     }

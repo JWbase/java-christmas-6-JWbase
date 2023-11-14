@@ -6,6 +6,8 @@ import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
+import christmas.util.EventDateUtil;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +28,10 @@ class WeekendDiscountPolicyTest {
     @Test
     void discountOnWeekdayAndDessertOrderTest() {
         Date date = new Date(16);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
         menus.put(Menu.T_BONE_STEAK, 1);
         menus.put(Menu.BBQ_RIB, 3);
-        Order order = new Order(date, menus);
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = weekendDiscountPolicy.discount(orderDto);
         assertThat(discount).isEqualTo(8092);
@@ -38,8 +41,9 @@ class WeekendDiscountPolicyTest {
     @Test
     void noDiscountOnWeekdayAndNonDessertOrderTest() {
         Date date = new Date(2);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
         menus.put(Menu.CAESAR_SALAD, 1);
-        Order order = new Order(date, menus);
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = weekendDiscountPolicy.discount(orderDto);
         assertThat(discount).isZero();
@@ -49,11 +53,26 @@ class WeekendDiscountPolicyTest {
     @Test
     void noDiscountOnWeekendTest() {
         Date date = new Date(4);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
         menus.put(Menu.CHOCOLATE_CAKE, 1);
         menus.put(Menu.ICE_CREAM, 1);
         menus.put(Menu.T_BONE_STEAK, 1);
         menus.put(Menu.BBQ_RIB, 3);
-        Order order = new Order(date, menus);
+        Order order = new Order(localDate, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = weekendDiscountPolicy.discount(orderDto);
+        assertThat(discount).isZero();
+    }
+
+    @DisplayName("이벤트 기간이 아닌 경우 할인이 적용되지 않는다.")
+    @Test
+    void noDiscountOutOfRangeTest() {
+        LocalDate localDate = LocalDate.of(2023, 11, 1);
+        menus.put(Menu.CHOCOLATE_CAKE, 1);
+        menus.put(Menu.ICE_CREAM, 1);
+        menus.put(Menu.T_BONE_STEAK, 1);
+        menus.put(Menu.BBQ_RIB, 3);
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = weekendDiscountPolicy.discount(orderDto);
         assertThat(discount).isZero();

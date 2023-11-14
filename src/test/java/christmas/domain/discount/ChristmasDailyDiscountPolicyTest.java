@@ -1,16 +1,16 @@
 package christmas.domain.discount;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.dto.OrderDto;
 import christmas.util.EventDateUtil;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,8 @@ class ChristmasDailyDiscountPolicyTest {
     @MethodSource("testCasesForChristmasDailyDiscount")
     void christmasDailyDiscount(int day, int expectedDiscount) {
         Date date = new Date(day);
-        Order order = new Order(date, menus);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = christmasDailyDiscountPolicy.discount(orderDto);
 
@@ -45,7 +46,8 @@ class ChristmasDailyDiscountPolicyTest {
     @Test
     void maxDiscountAmountTest() {
         Date date = new Date(25);
-        Order order = new Order(date, menus);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = christmasDailyDiscountPolicy.discount(orderDto);
 
@@ -56,7 +58,8 @@ class ChristmasDailyDiscountPolicyTest {
     @Test
     void noDiscountTest() {
         Date date = new Date(26);
-        Order order = new Order(date, menus);
+        LocalDate localDate = EventDateUtil.getLocalDateFromDay(date.getDate());
+        Order order = new Order(localDate, menus);
         OrderDto orderDto = new OrderDto(order);
         int discount = christmasDailyDiscountPolicy.discount(orderDto);
 

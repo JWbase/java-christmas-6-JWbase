@@ -8,8 +8,10 @@ import christmas.domain.order.Date;
 import christmas.domain.order.Order;
 import christmas.service.OrderService;
 import christmas.service.dto.OrderDto;
+import christmas.util.EventDateUtil;
 import christmas.view.InputView;
 import christmas.view.OutputView;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class ChristmasController {
@@ -34,7 +36,7 @@ public class ChristmasController {
 
     private Order createOrder() {
         outputView.printEventInformation();
-        Date date = inputDate();
+        LocalDate date = inputDate();
         while (true) {
             try {
                 Map<Menu, Integer> orderMenus = inputOrderMenu();
@@ -55,11 +57,11 @@ public class ChristmasController {
         }
     }
 
-    private Date inputDate() {
+    private LocalDate inputDate() {
         while (true) {
             try {
-                int date = inputView.readDate();
-                return new Date(date);
+                Date date = new Date(inputView.readDate());
+                return EventDateUtil.getLocalDateFromDay(date.getDate());
             } catch (IllegalArgumentException e) {
                 outputView.printError(e.getMessage());
             }
