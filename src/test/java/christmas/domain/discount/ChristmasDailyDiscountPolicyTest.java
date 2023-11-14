@@ -2,6 +2,7 @@ package christmas.domain.discount;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import christmas.constant.DiscountPolicyName;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
@@ -64,6 +65,14 @@ class ChristmasDailyDiscountPolicyTest {
         int discount = christmasDailyDiscountPolicy.discount(orderDto);
 
         assertThat(discount).isZero();
+    }
+
+    @DisplayName("이벤트 명은 크리스마스 디데이 할인 이다.")
+    @Test
+    void discountPolicyNameTest() {
+        DiscountPolicyName discountPolicyName = christmasDailyDiscountPolicy.getDiscountPolicyName();
+
+        assertThat(discountPolicyName).isEqualTo(DiscountPolicyName.CHRISTMAS_DAILY_DISCOUNT);
     }
 
     private static Stream<Arguments> testCasesForChristmasDailyDiscount() {

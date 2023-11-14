@@ -2,6 +2,7 @@ package christmas.domain.discount;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import christmas.constant.DiscountPolicyName;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
@@ -60,5 +61,27 @@ class WeekdayDiscountPolicyTest {
         OrderDto orderDto = new OrderDto(order);
         int discount = weekdayDiscountPolicy.discount(orderDto);
         assertThat(discount).isZero();
+    }
+
+    @DisplayName("이벤트 기간이 아닌 경우 할인이 적용되지 않는다.")
+    @Test
+    void noDiscountOutOfRangeTest() {
+        LocalDate localDate = LocalDate.of(2023, 11, 7);
+        menus.put(Menu.CHOCOLATE_CAKE, 1);
+        menus.put(Menu.ICE_CREAM, 1);
+        menus.put(Menu.T_BONE_STEAK, 1);
+        menus.put(Menu.BBQ_RIB, 3);
+        Order order = new Order(localDate, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = weekdayDiscountPolicy.discount(orderDto);
+        assertThat(discount).isZero();
+    }
+
+    @DisplayName("이벤트 명은 평일 할인 이다.")
+    @Test
+    void discountPolicyNameTest() {
+        DiscountPolicyName discountPolicyName = weekdayDiscountPolicy.getDiscountPolicyName();
+
+        assertThat(discountPolicyName).isEqualTo(DiscountPolicyName.WEEKDAY_DISCOUNT);
     }
 }

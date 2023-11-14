@@ -2,6 +2,7 @@ package christmas.domain.discount;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import christmas.constant.DiscountPolicyName;
 import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
@@ -73,5 +74,13 @@ class SpecialDiscountPolicyTest {
                 Arguments.of(17, 1000),
                 Arguments.of(24, 1000)
         );
+    }
+
+    @DisplayName("이벤트 명은 특별 할인 이다.")
+    @Test
+    void discountPolicyNameTest() {
+        DiscountPolicyName discountPolicyName = specialDiscountPolicy.getDiscountPolicyName();
+
+        assertThat(discountPolicyName).isEqualTo(DiscountPolicyName.SPECIAL_DISCOUNT);
     }
 }
