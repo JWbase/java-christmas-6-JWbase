@@ -1,41 +1,73 @@
 package christmas.domain.discount;
 
-import christmas.domain.Menu;
+import static org.assertj.core.api.Assertions.*;
+
+import christmas.domain.menu.Menu;
 import christmas.domain.order.Date;
 import christmas.domain.order.Order;
-import christmas.service.dto.DiscountPolicyDto;
+import christmas.service.dto.OrderDto;
 import christmas.util.EventDateUtil;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class ChristmasDailyDiscountPolicyTest {
+    private ChristmasDailyDiscountPolicy christmasDailyDiscountPolicy;
+    private Map<Menu, Integer> menus;
 
-    @DisplayName("12월 16일이면 할인금액은 2500원이다.")
-    @Test
-    void christmasDailyDiscount() {
-        Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
-        orderMenus.put(Menu.findByName(Menu.BBQ_RIB.getName()), 4);
-        Order order = new Order(EventDateUtil.getLocalDateFromDay(new Date(16).getDate()), orderMenus);
-        DiscountPolicyDto discountPolicyDto = new DiscountPolicyDto(order.getDate(), order.getMenus(),
-                order.calculateBeforeDiscountTotalPrice());
-        int discount = new ChristmasDailyDiscountPolicy().discount(discountPolicyDto);
-
-        Assertions.assertThat(discount).isEqualTo(2500);
+    @BeforeEach
+    void setUp() {
+        christmasDailyDiscountPolicy = new ChristmasDailyDiscountPolicy();
+        menus = new EnumMap<>(Menu.class);
+        menus.put(Menu.T_BONE_STEAK, 1);
     }
 
-    @DisplayName("12월 26일 이후 할인 금액은 0원 이다.")
-    @Test
-    void noDiscount() {
-        Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
-        orderMenus.put(Menu.findByName(Menu.BBQ_RIB.getName()), 4);
-        Order order = new Order(EventDateUtil.getLocalDateFromDay(new Date(26).getDate()), orderMenus);
-        DiscountPolicyDto discountPolicyDto = new DiscountPolicyDto(order.getDate(), order.getMenus(),
-                order.calculateBeforeDiscountTotalPrice());
-        int discount = new ChristmasDailyDiscountPolicy().discount(discountPolicyDto);
+    @DisplayName("할인금액이 1일 1,000원부터 하루에 100원씩 증가 한다.")
+    @ParameterizedTest
+    @MethodSource("testCasesForChristmasDailyDiscount")
+    void christmasDailyDiscount(int day, int expectedDiscount) {
+        Date date = new Date(day);
+        Order order = new Order(date, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = christmasDailyDiscountPolicy.discount(orderDto);
 
-        Assertions.assertThat(discount).isZero();
+        assertThat(discount).isEqualTo(expectedDiscount);
+    }
+
+    @DisplayName("12월 25일에는 할인 금액이 3400원이다.")
+    @Test
+    void maxDiscountAmountTest() {
+        Date date = new Date(25);
+        Order order = new Order(date, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = christmasDailyDiscountPolicy.discount(orderDto);
+
+        assertThat(discount).isEqualTo(3400);
+    }
+
+    @DisplayName("12월 26일 이후 할인 금액은 0원이다.")
+    @Test
+    void noDiscountTest() {
+        Date date = new Date(26);
+        Order order = new Order(date, menus);
+        OrderDto orderDto = new OrderDto(order);
+        int discount = christmasDailyDiscountPolicy.discount(orderDto);
+
+        assertThat(discount).isZero();
+    }
+
+    private static Stream<Arguments> testCasesForChristmasDailyDiscount() {
+        return Stream.of(
+                Arguments.of(1, 1000),
+                Arguments.of(5, 1400),
+                Arguments.of(24, 3300)
+        );
     }
 }
