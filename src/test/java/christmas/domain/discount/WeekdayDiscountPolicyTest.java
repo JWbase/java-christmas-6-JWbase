@@ -18,7 +18,7 @@ class WeekdayDiscountPolicyTest {
     void christmasDailyDiscount() {
         Map<Menu, Integer> orderMenus = new EnumMap<>(Menu.class);
         orderMenus.put(Menu.findByName(Menu.CHOCOLATE_CAKE.getName()), 4);
-        Order order = new Order(EventDateUtil.getLocalDateFromDay(new Date(18).getDate()), orderMenus);
+        Order order = new Order(new Date(18), orderMenus);
         OrderDto orderDto = new OrderDto(order);
         int discount = new WeekdayDiscountPolicy().discount(orderDto);
 

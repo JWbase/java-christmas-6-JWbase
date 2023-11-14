@@ -2,7 +2,6 @@ package christmas.domain.order;
 
 import christmas.domain.menu.Menu;
 import christmas.domain.menu.MenuCategory;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
 
@@ -11,10 +10,10 @@ public class Order {
     private static final String INVALID_ORDER_MESSAGE = "유효하지 않은 주문입니다. 다시 입력해 주세요.";
     private static final String TOTAL_QUANTITY_ERROR_MESSAGE = "최대 20개의 메뉴만 주문 가능합니다.";
     private static final String ONLY_DRINKS_ORDERED_ERROR_MESSAGE = "음료만 주문할 수 없습니다.";
-    private final LocalDate date;
+    private final Date date;
     private final Map<Menu, Integer> menus;
 
-    public Order(final LocalDate date, final Map<Menu, Integer> menus) {
+    public Order(final Date date, final Map<Menu, Integer> menus) {
         validateMenus(menus);
         this.date = date;
         this.menus = menus;
@@ -56,7 +55,7 @@ public class Order {
         return total;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
