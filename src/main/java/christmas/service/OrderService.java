@@ -37,10 +37,9 @@ public class OrderService {
 
     public int calculatePaymentDue(final OrderDto order) {
         Map<DiscountPolicyName, Integer> discountPolicy = getDiscountDetails(order);
-        discountPolicy.remove(DiscountPolicyName.GIFT_EVENT);
-
-        return discountPolicy.values().stream()
-                .mapToInt(Integer::intValue)
+        return discountPolicy.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals(DiscountPolicyName.GIFT_EVENT))
+                .mapToInt(Map.Entry::getValue)
                 .sum();
     }
 }
